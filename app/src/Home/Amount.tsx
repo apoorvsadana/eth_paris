@@ -1,8 +1,15 @@
 import React, {useCallback, useRef, useState} from 'react';
-import {Pressable, SafeAreaView, StyleSheet, Text, View} from 'react-native';
-import {TextInput, TouchableOpacity} from 'react-native-gesture-handler';
+import {
+  Button,
+  Pressable,
+  SafeAreaView,
+  StyleSheet,
+  Text,
+  View,
+} from 'react-native';
+import {TextInput} from 'react-native-gesture-handler';
 import {styled} from 'styled-components';
-import {CustomImage} from '../shared/components/CustomImage/CustomImage';
+import ScreenContainer from '../shared/components/ScreenContainer/ScreenContainer';
 
 const AmountContainer = styled(Pressable)`
   flex-direction: row;
@@ -24,15 +31,6 @@ const AmountInput = styled(TextInput)`
   opacity: 0;
 `;
 
-const SwapIconContainer = styled(TouchableOpacity)`
-  background-color: #3d3d3f;
-  width: 40px;
-  height: 40px;
-  justify-content: center;
-  align-items: center;
-  border-radius: 20px;
-`;
-
 const KeypadContainer = styled(View)`
   flex-direction: column;
 `;
@@ -48,7 +46,8 @@ const Number = styled(Text)`
   font-size: 38px;
 `;
 
-export default function Home() {
+export default function Amount(props) {
+  const {navigation} = props;
   const [enteredAmount, setEnteredAmount] = useState('0');
 
   const handleAmountChange = useCallback((data: string) => {
@@ -61,7 +60,7 @@ export default function Home() {
 
   const textInputRef = useRef(null);
   return (
-    <SafeAreaView style={styles.container}>
+    <ScreenContainer>
       <Text style={styles.text}>Swap</Text>
       <AmountContainer>
         <View style={{flex: 1}} />
@@ -134,22 +133,7 @@ export default function Home() {
             {!isDollarFocussed ? dollarValue : coinValue}
           </ConvertedValue> */}
         </Pressable>
-        <TouchableOpacity
-          style={{
-            flex: 1,
-            justifyContent: 'center',
-            backgroundColor: 'blue',
-          }}>
-          <SwapIconContainer onPress={() => console.log('yay')}>
-            <CustomImage
-              source={require('./assets/Swap.png')}
-              width={'20px'}
-              height={'20px'}
-            />
-          </SwapIconContainer>
-        </TouchableOpacity>
       </AmountContainer>
-
       <KeypadContainer>
         <NumberContainer>
           <Number>1</Number>
@@ -167,14 +151,16 @@ export default function Home() {
           <Number>9</Number>
         </NumberContainer>
       </KeypadContainer>
-    </SafeAreaView>
+      <Button onPress={() => navigation.push('Preview')} title="next" />
+      <Button onPress={() => navigation.pop()} title="go back" />
+    </ScreenContainer>
   );
 }
 
 const styles = StyleSheet.create({
   container: {
     flex: 1,
-    backgroundColor: '#101321',
+    backgroundColor: 'white',
   },
   text: {
     color: 'black',

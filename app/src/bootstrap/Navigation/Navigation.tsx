@@ -1,6 +1,5 @@
 import React, {useCallback, useEffect, useMemo, useState} from 'react';
 import {NavigationContainer} from '@react-navigation/native';
-import Home from '../../Home/Home';
 import Loading from '../../Loading/Loading';
 import {createNativeStackNavigator} from '@react-navigation/native-stack';
 import {styled} from 'styled-components';
@@ -8,6 +7,11 @@ import {View} from 'react-native';
 import RNBootSplash from 'react-native-bootsplash';
 import NavigationContext from './Navigation.context';
 import Onboarding from '../../Onboarding';
+import Token from '../../Home/Token';
+import Address from '../../Home/SelectAddress/Address';
+import Amount from '../../Home/Amount';
+import Success from '../../Home/Success';
+import Preview from '../../Home/Preview';
 
 const FlexContainer = styled(View)`
   flex: 1;
@@ -15,6 +19,26 @@ const FlexContainer = styled(View)`
 `;
 
 const RootStack = createNativeStackNavigator();
+const SendStack = createNativeStackNavigator();
+
+const SendFlow: React.FC<{props: any}> = props => {
+  const {navigation} = props;
+  return (
+    <SendStack.Navigator
+      screenOptions={{
+        headerShown: false,
+        contentStyle: {
+          backgroundColor: '#000000',
+        },
+      }}>
+      <SendStack.Screen name="Token" component={Token} />
+      <SendStack.Screen name="Address" component={Address} />
+      <SendStack.Screen name="Amount" component={Amount} />
+      <SendStack.Screen name="Success" component={Success} />
+      <SendStack.Screen name="Preview" component={Preview} />
+    </SendStack.Navigator>
+  );
+};
 
 const AppScreens: React.FC<{stack: any}> = ({stack}) => {
   const getCurrentStack = useCallback((): React.ReactNode => {
@@ -22,7 +46,7 @@ const AppScreens: React.FC<{stack: any}> = ({stack}) => {
       case 'app':
         return (
           <React.Fragment>
-            <RootStack.Screen name="Home" component={Home} />
+            <RootStack.Screen name="Send" component={SendFlow} />
           </React.Fragment>
         );
       case 'loading':
