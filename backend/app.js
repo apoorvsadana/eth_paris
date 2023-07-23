@@ -16,7 +16,7 @@ const provider = new starknet.Provider({
 
 const account = new starknet.Account(
   provider,
-  "0x6b95d551ba176bf0ac196e37ff17362e8d55a741abf25daa966955c4495b705",
+  "0x06074e06efcedd49fbfd7f96f6753c1aa2fc917964fe941e01ae4ef1939f85c1",
   "0x123124", // anything as we will change the signature anyways
   "1"
 );
