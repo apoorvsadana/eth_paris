@@ -16,24 +16,8 @@ import {FlatList, TouchableOpacity} from 'react-native-gesture-handler';
 import AddressSearch from './components/AddressSearch';
 import {useHeaderHeight} from '@react-navigation/elements';
 import ScreenContainer from '../../shared/components/ScreenContainer/ScreenContainer';
-
-const MainHeading = styled(Text)`
-  font-size: 17px;
-  font-weight: 600;
-  line-height: 20px;
-  color: white;
-  text-align: center;
-  padding-bottom: 30px;
-  align-self: center;
-  margin-top: 5px;
-`;
-
-const FixedContainer = styled(View)`
-  position: absolute;
-  bottom: 10px;
-  width: 100%;
-  align-self: center;
-`;
+import {MainHeading} from '../../shared/components/Typography';
+import useDataStore from '../../state/dataStore';
 
 const ItemContainer = styled(TouchableOpacity)`
   flex-direction: row;
@@ -68,6 +52,8 @@ export default function Address(props) {
   const [filteredData, setFilteredData] = useState([]);
   const masterData = [];
   const headerHeight = useHeaderHeight();
+  const recepientAddress = useDataStore(state => state.recepientAddress);
+  const setRecepientAddress = useDataStore(state => state.setRecepientAddress);
 
   const searchFilter = data => {
     //check name
@@ -86,15 +72,14 @@ export default function Address(props) {
   };
 
   const SearchItem: React.FC = ({item}) => {
-    const {setRecepientAddress} = props;
     const {name, address} = item;
-    const [hasSelectedAddress, setHasSelectedAddress] = useState(false);
 
     return (
       <ItemContainer
         onPress={() => {
           textClick();
           setHasSelectedAddress(true);
+          setRecepientAddress(address);
           setText(address);
         }}>
         <CustomImage
@@ -106,7 +91,7 @@ export default function Address(props) {
         <View style={{marginLeft: 8, justifyContent: 'space-between'}}>
           <TitleText>{name}</TitleText>
           <SubTitleContainer>
-            <SubTitleText>{truncate(address, 10)}</SubTitleText>
+            <SubTitleText>{truncate(recepientAddress, 10)}</SubTitleText>
           </SubTitleContainer>
         </View>
       </ItemContainer>
@@ -118,7 +103,7 @@ export default function Address(props) {
         <MainHeading>Select Address</MainHeading>
         <KeyboardAvoidingView
           keyboardVerticalOffset={
-            Platform.OS === 'ios' ? headerHeight + 47 : 30
+            Platform.OS === 'ios' ? headerHeight + 55 : 30
           }
           behavior={Platform.OS === 'ios' ? 'padding' : 'height'}
           style={{flex: 1}}>
@@ -135,21 +120,14 @@ export default function Address(props) {
             />
           </View>
 
-          <FixedContainer>
-            <CTA
-              title={'Next'}
-              onPress={() => {
-                if (!hasSelectedAddress) {
-                  props.setRecepientAddress({
-                    name: 'clipboard account',
-                    address: text,
-                  });
-                }
-                props.next();
-              }}
-              disabled={text.length === 0}
-            />
-          </FixedContainer>
+          <CTA
+            title={'Next'}
+            onPress={() => {
+              setRecepientAddress(text);
+              navigation.push('Amount');
+            }}
+            disabled={text.length === 0}
+          />
         </KeyboardAvoidingView>
       </Pressable>
     </ScreenContainer>

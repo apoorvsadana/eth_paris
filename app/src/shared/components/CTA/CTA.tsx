@@ -1,9 +1,10 @@
 import {Pressable, Text} from 'react-native';
 import React from 'react';
 import {styled} from 'styled-components';
+import {textClick} from '../../utils/haptics';
 
 const StyledButton = styled(Pressable)`
-  background-color: ${props => (props.disabled ? '#000' : '#d63171')};
+  background-color: ${props => (props.disabled ? '#293657' : '#d63171')};
   width: 100%;
   padding: 16px;
   border-radius: 30px;
@@ -23,9 +24,14 @@ interface Props {
 }
 
 const CTA: React.FC<Props> = props => {
-  const {title} = props;
+  const {title, onPress} = props;
   return (
-    <StyledButton {...props}>
+    <StyledButton
+      {...props}
+      onPress={() => {
+        textClick();
+        onPress();
+      }}>
       <ButtonText>{title.toUpperCase()}</ButtonText>
     </StyledButton>
   );

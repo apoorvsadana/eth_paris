@@ -7,11 +7,10 @@ import {View} from 'react-native';
 import RNBootSplash from 'react-native-bootsplash';
 import NavigationContext from './Navigation.context';
 import Onboarding from '../../Onboarding';
-import Token from '../../Home/Token';
 import Address from '../../Home/SelectAddress/Address';
-import Amount from '../../Home/Amount';
-import Success from '../../Home/Success';
-import Preview from '../../Home/Preview';
+import Amount from '../../Home/EnterAmount/Amount';
+import Success from '../../Home/Success/Success';
+import Preview from '../../Home/Preview/Preview';
 
 const FlexContainer = styled(View)`
   flex: 1;
@@ -22,7 +21,6 @@ const RootStack = createNativeStackNavigator();
 const SendStack = createNativeStackNavigator();
 
 const SendFlow: React.FC<{props: any}> = props => {
-  const {navigation} = props;
   return (
     <SendStack.Navigator
       screenOptions={{
@@ -31,10 +29,9 @@ const SendFlow: React.FC<{props: any}> = props => {
           backgroundColor: '#000000',
         },
       }}>
-      <SendStack.Screen name="Token" component={Token} />
+      <SendStack.Screen name="Success" component={Success} />
       <SendStack.Screen name="Address" component={Address} />
       <SendStack.Screen name="Amount" component={Amount} />
-      <SendStack.Screen name="Success" component={Success} />
       <SendStack.Screen name="Preview" component={Preview} />
     </SendStack.Navigator>
   );

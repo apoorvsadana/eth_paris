@@ -1,12 +1,15 @@
-import React from 'react';
-import {Button, SafeAreaView, StyleSheet, Text, View} from 'react-native';
+import React, {useEffect} from 'react';
+import {Image, View} from 'react-native';
 
 import useAuth from '../Auth/hooks/useAuth';
 import {
   WalletConnectModal,
   useWalletConnectModal,
 } from '@walletconnect/modal-react-native';
-import {TouchableOpacity} from 'react-native-gesture-handler';
+import useDataStore from '../state/dataStore';
+import ScreenContainer from '../shared/components/ScreenContainer/ScreenContainer';
+import CTA from '../shared/components/CTA/CTA';
+import Logo from './assets/productLogo.png';
 
 const projectId = '96db474090ba81b7e14d5b5e8102f269';
 
@@ -22,49 +25,43 @@ const providerMetadata = {
 
 export default function Onboarding() {
   const {login} = useAuth();
-  const {open, isConnected, address, provider} = useWalletConnectModal();
-  return (
-    <SafeAreaView style={styles.container}>
-      <Button
-        onPress={login}
-        title="Learn More"
-        color="#ffffff"
-        accessibilityLabel="Learn more about this purple button"
-      />
-      {isConnected ? (
-        <View>
-          <Text>Connected to {address}</Text>
-          <TouchableOpacity onPress={() => provider?.disconnect()}>
-            <Text>Disconnect</Text>
-          </TouchableOpacity>
-        </View>
-      ) : (
-        <TouchableOpacity
-          onPress={() => {
-            open();
-            // login();
-          }}>
-          <Text>Connect</Text>
-        </TouchableOpacity>
-      )}
+  const {open, isConnected, address, close} = useWalletConnectModal();
+  const setUserAddress = useDataStore(state => state.setUserAddress);
 
-      <WalletConnectModal
-        projectId={projectId}
-        providerMetadata={providerMetadata}
-      />
-      <Text style={styles.text}>Onboarding</Text>
-    </SafeAreaView>
+  useEffect(() => {
+    if (isConnected && address) {
+      close();
+      setUserAddress(address);
+      login();
+    }
+  }, [isConnected, login, setUserAddress, address, close]);
+
+  return (
+    <ScreenContainer
+      style={{
+        justifyContent: 'center',
+        alignItems: 'center',
+      }}>
+      {!isConnected ? (
+        <>
+          <View
+            style={{
+              flex: 1,
+              justifyContent: 'center',
+              alignItems: 'center',
+            }}>
+            <Image
+              source={Logo}
+              style={{margin: 10, width: 145, height: 145}}
+            />
+            <CTA title="Connect Wallet" onPress={() => open()} />
+          </View>
+          <WalletConnectModal
+            projectId={projectId}
+            providerMetadata={providerMetadata}
+          />
+        </>
+      ) : null}
+    </ScreenContainer>
   );
 }
-
-const styles = StyleSheet.create({
-  container: {
-    flex: 1,
-    backgroundColor: 'white',
-    justifyContent: 'center',
-    alignItems: 'center',
-  },
-  text: {
-    color: 'black',
-  },
-});
