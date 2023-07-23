@@ -29,10 +29,10 @@ const SendFlow: React.FC<{props: any}> = props => {
           backgroundColor: '#000000',
         },
       }}>
-      <SendStack.Screen name="Success" component={Success} />
       <SendStack.Screen name="Address" component={Address} />
       <SendStack.Screen name="Amount" component={Amount} />
       <SendStack.Screen name="Preview" component={Preview} />
+      <SendStack.Screen name="Success" component={Success} />
     </SendStack.Navigator>
   );
 };

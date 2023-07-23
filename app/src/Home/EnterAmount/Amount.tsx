@@ -149,7 +149,7 @@ export default function Amount(props) {
             setTransferAmount(parseFloat(enteredAmount));
             navigation.push('Preview');
           }}
-          disabled
+          disabled={enteredAmount.length === 0}
         />
       </FixedContainer>
     </ScreenContainer>
