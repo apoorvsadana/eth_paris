@@ -66,7 +66,7 @@ export default function Success(props) {
                 flexDirection: 'row',
                 justifyContent: 'center',
               }}>
-              <Amount style={{marginRight: 10}}>100</Amount>
+              <Amount style={{marginRight: 10}}>{transferAmount}</Amount>
               <BigHeading style={{color: '#3b4d7d'}}>ETH</BigHeading>
             </View>
           </View>
